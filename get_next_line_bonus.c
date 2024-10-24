@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkaliszc <mkaliszc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 02:29:36 by mkaliszc          #+#    #+#             */
-/*   Updated: 2024/10/24 18:48:08 by mkaliszc         ###   ########.fr       */
+/*   Updated: 2024/10/24 19:07:58 by mkaliszc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*read_line(char *buf, int fd)
 {
@@ -50,27 +50,27 @@ char	*update_line(char	*line, char *buf)
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer = NULL;
+	static char	*buffer[1024];
 	char		*line;
 	size_t		len;
 
 	len = 0;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	buffer = read_line(buffer, fd);
-	if (!buffer)
+	buffer[fd] = read_line(buffer[fd], fd);
+	if (!buffer[fd])
 	{
-		free(buffer);
+		free(buffer[fd]);
 		return (NULL);
 	}
-	while (buffer[len] != '\0' && buffer[len] != '\n')
+	while (buffer[fd][len] != '\0' && buffer[fd][len] != '\n')
 		len++;
-	line = ft_substr(buffer, 0, len + 1);
-	buffer = update_line(line, buffer);
+	line = ft_substr(buffer[fd], 0, len + 1);
+	buffer[fd] = update_line(line, buffer[fd]);
 	return (line);
 }
 
-/*int	main()
+/* int	main()
 {
 	char	*str;
 	int fd = open("test.txt", O_RDONLY);
@@ -87,6 +87,17 @@ char	*get_next_line(int fd)
 			str = get_next_line(fd);
 		}
 	}
+	fd = open("test2.txt", O_RDONLY);
+	str = get_next_line(fd);
+	while (str != NULL)
+	{
+		if (str)
+		{
+			printf("%s", str);
+			free(str);
+			str = get_next_line(fd);
+		}
+	}
 	close(fd);
 	return(0);
-}*/
+} */
