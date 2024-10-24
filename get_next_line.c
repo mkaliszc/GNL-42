@@ -6,7 +6,7 @@
 /*   By: mkaliszc <mkaliszc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 02:29:36 by mkaliszc          #+#    #+#             */
-/*   Updated: 2024/10/24 03:20:06 by mkaliszc         ###   ########.fr       */
+/*   Updated: 2024/10/24 18:23:08 by mkaliszc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ char	*read_line(char *buf, int fd)
 		index = read(fd, buffer, BUFFER_SIZE);
 		if (index == -1)
 		{
+			free(buf);
 			free(buffer);
 			return (NULL);
 		}
@@ -46,6 +47,8 @@ char	*update_line(char	*line, char *buf)
 	free(buf);
 	return (new_buf);
 }
+/*Pour le bonus gerer le fd max et faire un tableau
+de char* pour chaque | read_line(buffer[fd], fd)*/
 
 char	*get_next_line(int fd)
 {
