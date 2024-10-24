@@ -6,7 +6,7 @@
 /*   By: mkaliszc <mkaliszc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 23:51:55 by mkaliszc          #+#    #+#             */
-/*   Updated: 2024/10/23 02:49:35 by mkaliszc         ###   ########.fr       */
+/*   Updated: 2024/10/24 03:42:11 by mkaliszc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,27 @@ size_t	ft_strlen(char *s)
 	size_t	i;
 
 	i = 0;
+	if (!s)
+		return (0);
 	while (s[i])
 		i += 1;
 	return (i);
 }
 
-char	*ft_strchr(char *str, int c)
+int	ft_strchr(char *str, int c)
 {
 	size_t		index;
 	char		*ptr;
 
 	index = 0;
 	ptr = (char *)str;
-	while (index < (ft_strlen(str) + 1))
+	if (!str)
+		return (0);
+	while (str[index])
 	{
 		if (ptr[index] == (char)c)
 		{
-			return (&ptr[index]);
+			return (1);
 		}
 		index++;
 	}
@@ -46,16 +50,12 @@ char	*ft_substr(char *s, unsigned int start, size_t len)
 	size_t	i;
 
 	i = 0;
-	if (start > ft_strlen(s))
+	if (!s[i])
+		return (NULL);
+	if (start > ft_strlen(s) || len == 0)
 	{
-		ptr = malloc(sizeof(char));
-		if (ptr == NULL)
-			return (NULL);
-		ptr[0] = '\0';
-		return (ptr);
+		return (NULL);
 	}
-	if (len > ft_strlen(s) - start)
-		len = ft_strlen(s) - start;
 	ptr = malloc(sizeof(char) * (len + 1));
 	if (ptr == NULL)
 		return (NULL);
@@ -70,25 +70,27 @@ char	*ft_substr(char *s, unsigned int start, size_t len)
 
 char	*ft_strjoin(char *s1, char *s2)
 {
+	char	*dest;
 	size_t	i;
 	size_t	j;
-	char	*return_chain;
 
-	i = 0;
-	j = 0;
-	return_chain = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (return_chain == NULL)
+	if (!s1)
+	{
+		s1 = malloc(1);
+		s1[0] = '\0';
+	}
+	if (!s1 || !s2)
 		return (NULL);
-	while (s1[i] != '\0')
-	{
-		return_chain[i] = s1[i];
-		i++;
-	}
-	while (s2[j] != '\0')
-	{
-		return_chain[i + j] = s2[j];
-		j++;
-	}
-	return_chain[i + j] = '\0';
-	return (return_chain);
+	dest = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!dest)
+		return (NULL);
+	i = -1;
+	j = 0;
+	while (s1[++i])
+		dest[i] = s1[i];
+	while (s2[j])
+		dest[i++] = s2[j++];
+	dest[i] = '\0';
+	free(s1);
+	return (dest);
 }
